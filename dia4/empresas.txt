@@ -1,2 +1,4 @@
 id,nombre,email
 1,Microsoft,microsoft@outlock.com
+2,Google,google@gmail.com
+3,Amazon,amazon@outlock.com
