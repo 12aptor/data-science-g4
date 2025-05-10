@@ -78,3 +78,4 @@ def actualizar_empresa():
     with open('empresas.txt', 'w') as archivo:
         archivo.write('id,nombre,email\n')
         archivo.writelines(lineas_actualizadas)
+        print('\nEmpresa actualizada correctamente.')
