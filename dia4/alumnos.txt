@@ -1,3 +1,0 @@
-1,Juan,juan@gmail.com,20
-2,Pedro,pedro@gmail.com,21
-3,Carlos,carlos@gmail.com,22
