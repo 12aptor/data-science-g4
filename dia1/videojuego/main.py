@@ -1,10 +1,12 @@
 import sys
 import pygame
+import time
 
 ANCHO = 640
 ALTO = 480
 color_azul = (0, 0, 64)  # Color azul para el fondo.
 
+pygame.init()
 ######## CLASES #############################
 class Bolita(pygame.sprite.Sprite):
     
@@ -21,7 +23,8 @@ class Bolita(pygame.sprite.Sprite):
         self.speed = [3,3]
         
     def update(self):
-        if self.rect.bottom >= ALTO or self.rect.top <= 0:
+        #if self.rect.bottom >= ALTO or self.rect.top <= 0:
+        if self.rect.top <= 0:
             self.speed[1] = -self.speed[1]
         elif self.rect.right >= ANCHO or self.rect.left <= 0:
             self.speed[0] = -self.speed[0]
@@ -35,7 +38,7 @@ class Paleta(pygame.sprite.Sprite):
         
         self.image = pygame.image.load('imagenes/paleta.png')
         self.rect = self.image.get_rect()
-        self.rect.midbottom = (ANCHO / 2,ALTO - 20)
+        self.rect.midbottom = (ANCHO -70,ALTO - 20)
         self.speed = [0,0]
         
     def update(self,evento):
@@ -95,7 +98,21 @@ bolita = Bolita()
 jugador = Paleta()
 muro = Muro(48)
 
+#carga sonidos para videojuego
+sonido_colision_paleta = pygame.mixer.Sound('sonidos/colision.ogg')
+sonido_colision_muro = pygame.mixer.Sound('sonidos/colision_muro.ogg')
+sonido_game_over = pygame.mixer.Sound('sonidos/game_over.ogg')
 
+def juego_terminado():
+    fuente = pygame.font.SysFont('Arial',72)
+    texto = fuente.render('GAME OVER',True,(255,255,255))
+    texto_rect = texto.get_rect()
+    texto_rect.center = [ANCHO / 2, ALTO / 2]
+    pantalla.blit(texto,texto_rect)
+    pygame.display.flip()
+    pygame.mixer.Sound.play(sonido_game_over)
+    time.sleep(5)
+    sys.exit()
 
 while True:
     # ESTABLECEMOS LOS FRAMES POR SEGUNDO(FPS)
@@ -109,6 +126,24 @@ while True:
     #actualizamos la posición de la bolita
     bolita.update()
     
+    ###### colisiones
+    if pygame.sprite.collide_rect(bolita,jugador):
+        bolita.speed[1] = -bolita.speed[1]
+        pygame.mixer.Sound.play(sonido_colision_paleta)
+        
+    lista_ladrillos_colision = pygame.sprite.spritecollide(bolita,muro,False)
+    if lista_ladrillos_colision:
+        ladrillo_colision = lista_ladrillos_colision[0]
+        cx = bolita.rect.centerx
+        if cx < ladrillo_colision.rect.left or cx > ladrillo_colision.rect.right:
+            bolita.speed[0] = -bolita.speed[0]
+        else:
+            bolita.speed[1] = -bolita.speed[1]
+        muro.remove(ladrillo_colision)
+        pygame.mixer.Sound.play(sonido_colision_muro)
+    
+    if bolita.rect.top > ALTO:
+        juego_terminado()
             
     # Rellenar la pantalla.
     pantalla.fill(color_azul)
