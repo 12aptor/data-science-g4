@@ -11,6 +11,8 @@ class Alumno:
         self.app.title('Crud de alumnos')
         self.app.geometry('640x480')
         
+        self.alumno_id = 0
+        
         try:
             #creamos una conexión a la bd
             self.connection = mysql.connector.connect(
@@ -74,7 +76,7 @@ class Alumno:
         
     def cargar_alumnos(self):
         self.limpiar_tree()
-        self.cursor.execute("select id,nombre,email,celular from alumno")
+        self.cursor.execute("select id,nombre,email,celular from alumno order by id asc")
         for row in self.cursor.fetchall():
             alumno_row = (
                 row[1],row[2],row[3]
@@ -91,8 +93,14 @@ class Alumno:
     def eliminar(self):
         seleccion = self.tree.selection()
         if seleccion:
-            for item in seleccion:
-                self.tree.delete(item)
+            self.alumno_id = self.tree.item(seleccion[0])["text"]
+            respuesta = messagebox.askyesno("confiramción","¿Esta seguro que desea eliminar el registro?")
+            if respuesta:
+                alumno_eliminar = (self.alumno_id,)
+                query = "delete from alumno where id=%s"
+                self.cursor.execute(query,alumno_eliminar)
+                self.connection.commit()
+                self.cargar_alumnos()
         else:
             messagebox.showerror('Alerta','Por favor seleccione un registro')
         
