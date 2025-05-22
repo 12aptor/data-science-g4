@@ -8,7 +8,7 @@ python -m venv venv
 ## PASO 2 - ACTIVAR ENTORNO VIRTUAL
 
 ```
-python -m venv venv
+source venv/Scripts/activate
 ```
 
 ## PASO 3 - INSTALAR DEPENDENCIAS
