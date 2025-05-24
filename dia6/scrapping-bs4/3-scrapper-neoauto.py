@@ -1,5 +1,28 @@
 import requests
 from bs4 import BeautifulSoup
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password='root',
+    database='db_g4'
+)
+
+cursor = conn.cursor()
+# Crear la tabla si no existe
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS autos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255),
+    precio VARCHAR(50),
+    kilometraje VARCHAR(50),
+    ubicacion VARCHAR(255),
+    combustible VARCHAR(50),
+    transmision VARCHAR(50)
+);
+''')
+conn.commit()
 
 URL = 'https://neoauto.com/venta-de-autos-seminuevos'
 
@@ -31,11 +54,14 @@ if response.status_code == 200:
         # Imprime la información extraída
         print('Título:', titulo)
         print('Precio:', precio)
-        print('Kilometraje:', kilometraje)
-        print('Ubicación:', ubicacion)
-        print('Combustible:', combustible)
-        print('Transmisión:', transmision)
         print('---'*20)
+        
+        cursor.execute('''
+        INSERT INTO autos (titulo, precio, kilometraje, ubicacion, combustible, transmision)
+        values (%s, %s, %s, %s, %s, %s)
+        ''', (titulo, precio, kilometraje, ubicacion, combustible, transmision))
+        conn.commit()
+    print('Datos insertados correctamente')
 
 else:
     print('Error en la conexión')
