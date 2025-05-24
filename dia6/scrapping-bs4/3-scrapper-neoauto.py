@@ -15,11 +15,13 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS autos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255),
-    precio VARCHAR(50),
+    precio DOUBLE,
     kilometraje VARCHAR(50),
     ubicacion VARCHAR(255),
     combustible VARCHAR(50),
-    transmision VARCHAR(50)
+    transmision VARCHAR(50),
+    enlace VARCHAR(255),
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ''')
 conn.commit()
@@ -51,15 +53,21 @@ if response.status_code == 200:
         desc_texts = auto_soup.find_all('p', class_='c-results-details__description-text')
         combustible = desc_texts[0].find('span', class_='c-results-used__detail-fuel').get_text(strip=True) if desc_texts else None
         transmision = desc_texts[0].get_text(strip=True).split('|')[-1].strip() if desc_texts else None
+        enlace = auto_soup.find('a', class_='c-results__link')['href'] if auto_soup.find('a', class_='c-results__link') else None
+        enlace = URL + enlace
         # Imprime la información extraída
+        precio = precio.replace(' ', '')
+        precio = float(precio.replace('US$', '').replace(',', '').strip())
         print('Título:', titulo)
         print('Precio:', precio)
+        print('enlace:', enlace)
         print('---'*20)
         
         cursor.execute('''
-        INSERT INTO autos (titulo, precio, kilometraje, ubicacion, combustible, transmision)
-        values (%s, %s, %s, %s, %s, %s)
-        ''', (titulo, precio, kilometraje, ubicacion, combustible, transmision))
+        INSERT INTO autos (titulo, precio, kilometraje, ubicacion, combustible, transmision,enlace)
+        values (%s, %s, %s, %s, %s, %s,%s)
+        ''', (titulo, precio, kilometraje, ubicacion, combustible, transmision,enlace))
+        
         conn.commit()
     print('Datos insertados correctamente')
 
