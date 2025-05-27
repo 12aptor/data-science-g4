@@ -5,4 +5,7 @@ URL = 'https://www.sunat.gob.pe/'
 
 response = requests.get(URL)
 
-print(f'Status Code: {response.status_code}')
+if response.status_code == 200:
+    soup = BeautifulSoup(response.content, 'html.parser')
+    precio_venta = soup.find('strong',id='sell-rate')
+    print(f'precio venta dolares : {precio_venta.get_text()}')
