@@ -1,0 +1,3 @@
+prefect
+requests
+mysql-connector-python
