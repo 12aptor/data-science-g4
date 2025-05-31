@@ -8,7 +8,8 @@ def etl_pipeline():
     print("PIPELINE DE ETL LINKEDIN")
     jobs = extract_jobs()
     print(jobs)
-    transform_jobs()
+    jobs_transformed = transform_jobs(jobs)
+    print(jobs_transformed)
     load_jobs()
     print("ETL COMPLETADO")
     
