@@ -1,0 +1,10 @@
+from prefect import flow
+from etl.extract import extract_jobs
+
+@flow
+def etl_pipeline():
+    print("PIPELINE DE ETL LINKEDIN")
+    extract_jobs()
+    print("ETL COMPLETADO")
+    
+etl_pipeline()
