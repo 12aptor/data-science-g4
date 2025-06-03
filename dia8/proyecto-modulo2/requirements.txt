@@ -1,4 +1,0 @@
-mysql-connector-python
-requests
-beautifulsoup4
-prefect
