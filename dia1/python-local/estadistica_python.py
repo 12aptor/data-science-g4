@@ -5,3 +5,12 @@ datos = np.array([2,3.5,4,1.5,3,2.5,5,4.5,3.5,2,4,2,3,1,3.5,4,2.5,2,3,4.5])
 #media
 media = np.mean(datos)
 print(f'Media: {media}')
+
+#mediana
+mediana = np.median(datos)
+print(f'Mediana: {mediana}')
+
+#moda
+valores,conteos = np.unique(datos, return_counts=True)
+moda = valores[np.argmax(conteos)]
+print(f'Moda: {moda}')
