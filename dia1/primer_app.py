@@ -11,4 +11,9 @@ def saludo():
     nombre = request.args.get('nombre',' ')
     return f"<h1>Hola,{nombre}!</h1>"
 
+@app.route('/sumar/<int:a>/<int:b>')
+def sumar(a, b):
+    resultado = a + b
+    return f"<h1>La suma de {a} y {b} es {resultado}</h1>"
+
 app.run(debug=True)
