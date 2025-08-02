@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Monedas - Soles a Dólares</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .currency-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .currency-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            flex: 1;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .currency-box:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .currency-flag {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .peru-flag {
+            background: linear-gradient(to right, #d91e36 33%, white 33%, white 66%, #d91e36 66%);
+        }
+
+        .usa-flag {
+            background: linear-gradient(to bottom, #b22234 0%, #b22234 7.7%, white 7.7%, white 15.4%, #b22234 15.4%);
+        }
+
+        .currency-code {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .currency-name {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        .input-group {
+            margin: 30px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .currency-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .currency-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .currency-symbol {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .convert-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .convert-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .exchange-rate {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .currency-icons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .swap-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 auto;
+        }
+
+        .swap-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💱 Conversor</h1>
+            <p>Convierte Soles Peruanos a Dólares Americanos</p>
+        </div>
+
+        <div class="currency-icons">
+            <div class="currency-box">
+                <div class="currency-flag peru-flag"></div>
+                <div class="currency-code">PEN</div>
+                <div class="currency-name">Sol Peruano</div>
+            </div>
+            
+            <div class="swap-btn">
+                <span class="arrow">⇄</span>
+            </div>
+            
+            <div class="currency-box">
+                <div class="currency-flag usa-flag"></div>
+                <div class="currency-code">USD</div>
+                <div class="currency-name">Dólar Americano</div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="amount">Cantidad a convertir:</label>
+            <div class="input-container">
+                <input 
+                    type="number" 
+                    id="amount" 
+                    class="currency-input" 
+                    placeholder="Ingresa la cantidad"
+                    step="0.01"
+                    min="0"
+                >
+                <span class="currency-symbol">S/</span>
+            </div>
+        </div>
+
+        <button class="convert-btn">
+            🔄 Convertir Moneda
+        </button>
+
+        <div id="result" class="result hidden">
+            <div class="result-amount" id="resultAmount">$0.00</div>
+            <div class="exchange-rate" id="exchangeRate">
+                Tipo de cambio: 1 PEN = 0.27 USD
+            </div>
+        </div>
+    </div>
+</body>
+</html>
