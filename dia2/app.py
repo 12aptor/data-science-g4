@@ -2,8 +2,12 @@ from flask import Flask,request, render_template
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/',methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    resultado = 0
+    if request.method == 'POST':
+        origen = request.form['origen']
+        resultado = int(origen) / 3.58
+    return render_template('index.html',destino=resultado)
 
 app.run(debug=True)

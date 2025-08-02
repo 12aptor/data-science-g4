@@ -262,11 +262,12 @@
                 <div class="currency-name">Dólar Americano</div>
             </div>
         </div>
-
+<form method="POST">
         <div class="input-group">
             <label for="amount">Cantidad a convertir:</label>
             <div class="input-container">
-                <input 
+                <input
+                    name="origen"
                     type="number" 
                     id="amount" 
                     class="currency-input" 
@@ -281,13 +282,12 @@
         <button class="convert-btn">
             🔄 Convertir Moneda
         </button>
-
-        <div id="result" class="result hidden">
-            <div class="result-amount" id="resultAmount">$0.00</div>
-            <div class="exchange-rate" id="exchangeRate">
-                Tipo de cambio: 1 PEN = 0.27 USD
-            </div>
+</form>
+{% if destino > 0 %}
+        <div id="result" class="result">
+            <div class="result-amount" id="resultAmount">${{destino}}</div>
         </div>
+{% endif %}
     </div>
 </body>
 </html>
