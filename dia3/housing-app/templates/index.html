@@ -317,21 +317,23 @@
                         <label for="bedrooms">Número de Habitaciones</label>
                         <select id="bedrooms" name="rooms" required>
                             <option value="">Selecciona...</option>
-                            <option value="1">1 Habitación</option>
-                            <option value="2">2 Habitaciones</option>
-                            <option value="3">3 Habitaciones</option>
                             <option value="4">4 Habitaciones</option>
                             <option value="5">5 Habitaciones</option>
+                            <option value="6">6 Habitaciones</option>
+                            <option value="7">7 Habitaciones</option>
+                            <option value="8">8 Habitaciones</option>
                         </select>
                     </div>
 
                 </div>
                 <!-- Precio Estimado -->
+                {% if result > 0 %}
                 <div class="price-display">
                     <h3>Precio Estimado</h3>
-                    <div class="price-amount">$---,---</div>
+                    <div class="price-amount">${{result}}</div>
                     <p class="price-note">El precio se calculará al enviar el formulario</p>
                 </div>
+                {% endif %}
 
                 <!-- Información Adicional -->
                 <div class="info-card">
