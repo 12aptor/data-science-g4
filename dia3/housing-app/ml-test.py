@@ -18,4 +18,4 @@ prediction = model.predict(rooms_sc)
 #print(f"Predicción: {prediction}")
 
 prediction_sc = sc_y.inverse_transform(prediction) * 1000
-print(f' El precio de un departamento con {rooms} habitaciones es: ${prediction_sc[0][0]:.2f}')
+print(f' El precio de un departamento con {rooms} habitaciones es: $ {prediction_sc[0][0]:.2f}')
