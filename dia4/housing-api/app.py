@@ -84,6 +84,23 @@ def get_data_by_id(id):
     
     return jsonify(context), 200 if data else 404
 
+@app.route('/housing/<int:id>',methods=['PUT'])
+def update_data(id):
+    data = Housing.query.get(id)
+    rooms = request.json['rooms']
+    
+    data.rooms = rooms
+    db.session.commit()
+    
+    data_schema = HousingSchema()
+    context = {
+        'status': True,
+        'message': 'Registro actualizado correctamente',
+        'content': data_schema.dump(data)
+    
+    }
+    return jsonify(context), 200
+
 
 app.run(debug=True)
            
