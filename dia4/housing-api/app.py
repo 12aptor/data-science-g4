@@ -42,6 +42,7 @@ def index():
 @app.route('/housing',methods=['POST'])
 def set_data():
     rooms = request.json['rooms']
+    
     new_housing = Housing(rooms)
     #insertamos el nuevo registro en la base de datos
     db.session.add(new_housing) # insert into housing values(null,rooms)
