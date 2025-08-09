@@ -38,6 +38,13 @@ class HousingSchema(ma.Schema):
 db.create_all()
 print('Base de datos creada')
 
+def predict_price(rooms):
+    rooms_sc = sc_x.transform(np.array([[rooms]]))
+    prediction = model.predict(rooms_sc)
+    prediction_sc = sc_y.inverse_transform(prediction) * 1000
+    price = round(prediction_sc[0][0],2)
+    return price
+
 @app.route('/')
 def index():
     context = {
@@ -50,11 +57,7 @@ def index():
 @app.route('/housing',methods=['POST'])
 def set_data():
     rooms = request.json['rooms']
-    
-    rooms_sc = sc_x.transform(np.array([[rooms]]))
-    prediction = model.predict(rooms_sc)
-    prediction_sc = sc_y.inverse_transform(prediction) * 1000
-    price = round(prediction_sc[0][0],2)
+    price = predict_price(rooms)
     
     new_housing = Housing(rooms)
     new_housing.price = price
@@ -102,9 +105,14 @@ def get_data_by_id(id):
 @app.route('/housing/<int:id>',methods=['PUT'])
 def update_data(id):
     data = Housing.query.get(id)
+    if not data:
+        return jsonify({'status': False, 'message': 'Registro no encontrado'}), 404
+    
     rooms = request.json['rooms']
+    price = predict_price(rooms)
     
     data.rooms = rooms
+    data.price = price
     db.session.commit()
     
     data_schema = HousingSchema()
