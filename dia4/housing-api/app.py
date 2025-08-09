@@ -18,6 +18,13 @@ class Housing(db.Model):
     
     def __init__(self,rooms):
         self.rooms = rooms
+        
+### CREAMOS UN ESQUEMA PAARA SERIALIZAR LOS DATOS
+ma = Marshmallow(app)
+class HousingSchema(ma.Schema):
+    id = ma.Integer()
+    rooms = ma.Integer()
+    price = ma.Float()
 
 ## REGISTRAMOS LA TABLA EN LA BASE DE DATOS
 db.create_all()
@@ -46,6 +53,20 @@ def set_data():
     }
     
     return jsonify(context),201
+
+@app.route('/housing',methods=['GET'])
+def get_data():
+    data = Housing.query.all() # select * from housing
+    
+    data_schema = HousingSchema(many=True)
+    
+    context = {
+        'status':True,
+        'message': 'listado de registros',
+        'content': data_schema.dump(data)
+    }
+    
+    return jsonify(context),200
 
 app.run(debug=True)
            
