@@ -2,6 +2,14 @@ from flask import Flask,request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
+import joblib
+import numpy as np
+import sklearn
+
+model = joblib.load('./model/housing-ml.pkl')
+sc_x = joblib.load('./model/scaler_x.pkl')
+sc_y = joblib.load('./model/scaler_y.pkl')
+
 app = Flask(__name__)
 
 #### CONFIGURACION DE SQLALCHEMY ####
@@ -43,7 +51,13 @@ def index():
 def set_data():
     rooms = request.json['rooms']
     
+    rooms_sc = sc_x.transform(np.array([[rooms]]))
+    prediction = model.predict(rooms_sc)
+    prediction_sc = sc_y.inverse_transform(prediction) * 1000
+    price = round(prediction_sc[0][0],2)
+    
     new_housing = Housing(rooms)
+    new_housing.price = price
     #insertamos el nuevo registro en la base de datos
     db.session.add(new_housing) # insert into housing values(null,rooms)
     db.session.commit()
