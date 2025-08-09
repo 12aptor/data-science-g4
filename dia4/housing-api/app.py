@@ -47,9 +47,12 @@ def set_data():
     db.session.add(new_housing) # insert into housing values(null,rooms)
     db.session.commit()
     
+    data_schema = HousingSchema()
+    
     context = {
         'status':True,
-        'message': 'Registro insertado correctamente'
+        'message': 'Registro insertado correctamente',
+        'content': data_schema.dump(new_housing)
     }
     
     return jsonify(context),201
@@ -67,6 +70,20 @@ def get_data():
     }
     
     return jsonify(context),200
+
+@app.route('/housing/<int:id>',methods=['GET'])
+def get_data_by_id(id):
+    data = Housing.query.get(id) # select * from housing where id = id
+    data_schema = HousingSchema()
+    
+    context = {
+        'status': True,
+        'message': 'Registro encontrado',
+        'content': data_schema.dump(data) if data else None
+    }
+    
+    return jsonify(context), 200 if data else 404
+
 
 app.run(debug=True)
            
