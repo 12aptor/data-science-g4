@@ -101,6 +101,22 @@ def update_data(id):
     }
     return jsonify(context), 200
 
+@app.route('/housing/<int:id>',methods=['DELETE'])
+def delete_data(id):
+    data = Housing.query.get(id)
+    
+    if not data:
+        return jsonify({'status': False, 'message': 'Registro no encontrado'}), 404
+    
+    db.session.delete(data) #delete from housing where id = id
+    db.session.commit()
+    
+    context = {
+        'status': True,
+        'message': 'Registro eliminado correctamente'
+    }
+    
+    return jsonify(context), 200
 
 app.run(debug=True)
            
